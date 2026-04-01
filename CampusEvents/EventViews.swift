@@ -10,17 +10,30 @@ import SwiftUI
 // Event List View
 struct EventListView: View {
     @EnvironmentObject var viewModel: EventsViewModel
+    @State private var searchText = ""
+    
+    // Filtering logic
+    var filteredEvents: [Event] {
+        if searchText.isEmpty {
+            return viewModel.events
+        } else {
+            return viewModel.events.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(viewModel.events) { event in
+                // Use filteredEvents
+                ForEach(filteredEvents) { event in
                     NavigationLink(destination: EventDetailView(event: event)) {
                         EventRowView(event: event)
                     }
                 }
             }
             .navigationTitle("Campus Events")
+            // Make searchable
+            .searchable(text: $searchText, prompt: "Search events") 
         }
     }
 }
