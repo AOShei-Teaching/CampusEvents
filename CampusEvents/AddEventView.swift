@@ -1,3 +1,13 @@
+//
+//  AddEventView.swift
+//  CampusEvents
+//
+//  Created by Andrew O'Shei on 01/04/2026.
+//
+
+import SwiftUI
+import Combine
+
 struct AddEventView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var viewModel: EventsViewModel

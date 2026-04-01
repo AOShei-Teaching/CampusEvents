@@ -11,6 +11,7 @@ import SwiftUI
 struct EventListView: View {
     @EnvironmentObject var viewModel: EventsViewModel
     @State private var searchText = ""
+    @State private var isShowingAddEvent: Bool = false
     
     // Filtering logic
     var filteredEvents: [Event] {
@@ -24,16 +25,29 @@ struct EventListView: View {
     var body: some View {
         NavigationView {
             List {
-                // Use filteredEvents
                 ForEach(filteredEvents) { event in
                     NavigationLink(destination: EventDetailView(event: event)) {
                         EventRowView(event: event)
                     }
                 }
             }
+            // Add title
             .navigationTitle("Campus Events")
-            // Make searchable
-            .searchable(text: $searchText, prompt: "Search events") 
+            // Add search bar
+            .searchable(text: $searchText, prompt: "Search events")
+            // Add toolbar
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isShowingAddEvent = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $isShowingAddEvent) {
+                AddEventView()
+            }
         }
     }
 }
